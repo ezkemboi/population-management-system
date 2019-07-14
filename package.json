@@ -1,0 +1,28 @@
+{
+  "name": "population-management-system",
+  "version": "1.0.0",
+  "description": "This is a population managment system written in Nodejs",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/me-x-mi/population-management-system.git"
+  },
+  "keywords": [
+    "nodejs",
+    "crud",
+    "app",
+    "population",
+    "managment",
+    "system",
+    "APIs"
+  ],
+  "author": "Ezrqn Kemboi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/me-x-mi/population-management-system/issues"
+  },
+  "homepage": "https://github.com/me-x-mi/population-management-system#readme"
+}
