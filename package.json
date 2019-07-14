@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node src/app.js",
-    "test": "nyc --reporter=lcov --reporter=text mocha --exit"
+    "test": "nyc --reporter=text mocha --exit",
+    "coverage": "nyc --report --reporter=text-lcov | coveralls"
   },
   "repository": {
     "type": "git",

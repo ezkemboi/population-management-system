@@ -8,11 +8,11 @@ describe("App tests", () => {
         server = app;
         done();
         server.listen(port)
-    })
+    });
     it("Should start the server", () => {
         assert.strictEqual(1, 1);
     });
     after(done => {
         done();
-    })
+    });
 });
