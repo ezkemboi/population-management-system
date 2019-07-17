@@ -1,18 +1,19 @@
-var assert = require('assert');
-var app = require("../src/app.js");
+const chai = require("chai");
+const chaiHttp = require("chai-http");
+const app = require("../src/app");
+
+// Set up chai
+chai.should();
+chai.use(chaiHttp);
 
 describe("App tests", () => {
-    let server;
-    const port = 8000;
-    before(done => {
-        server = app;
-        done();
-        server.listen(port)
-    });
-    it("Should start the server", () => {
-        assert.strictEqual(1, 1);
-    });
-    after(done => {
-        done();
+
+    it('should return main page /', (done) => {
+        chai.request(app)
+            .get('/')
+            .end((err, res) => {
+                res.should.have.status(200);
+                done();
+            });
     });
 });
