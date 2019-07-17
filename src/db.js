@@ -1,24 +1,31 @@
 var Sequelize = require("sequelize");
-var sequlize = require("./sqlitesetup");
+var sequelize = require("./sqlitesetup");
 
-const Location = sequlize.define(
+const Location = sequelize.define(
     "location",
     {
-        name: Sequelize.STRING,
-        allowNull: false
+        // attributes
+        name: {
+            type: Sequelize.STRING,
+            allowNull: false,
+            unique: true
+        },
+        totalfemale: {
+            type: Sequelize.INTEGER,
+            allowNull: false
+        },
+        totalmale: {
+            type: Sequelize.INTEGER,
+            allowNull: false
+        },
+        total: {
+            type: Sequelize.INTEGER,
+            allowNull: false
+        }
     },
     {
-        totalfemale: Sequelize.INTEGER,
-        allowNull: false
-    },
-    {
-        totalmale: Sequelize.INTEGER,
-        allowNull: false
-    },
-    {
-        total: Sequelize.INTEGER,
-        allowNull: false
-    },
+        // options
+    }
 );
 
 exports = module.exports = Location;

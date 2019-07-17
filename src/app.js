@@ -2,7 +2,6 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 var Location = require("./db");
-var sequlize = require("./sqlitesetup");
 
 const port = 8000;
 const app = express();
@@ -36,105 +35,119 @@ app.post('/locations', async (req, res) => {
         });
     };
     const totalPopulation = femalePopulation + malePopulation;
-    const locationDetails = await Location.save({
-        name: name,
-        totalfemale: femalePopulation,
-        totalmale: malePopulation,
-        total: totalPopulation
-    });
-    console.log('-->>>>loca-->>>', locationDetails);
-    res.status(201).send({
-        success: true,
-        message: "Location created successfully.",
-        locationDetails
-    });
+    try {
+        const locationDetails = await Location.create({
+            name: name,
+            totalfemale: femalePopulation,
+            totalmale: malePopulation,
+            total: totalPopulation
+        });
+        res.status(201).send({
+            success: true,
+            message: "Location created successfully.",
+            locationDetails
+        });
+    } catch (err) {
+        res.status(500).json(err)
+    }
 });
 
 // Get all locations
 app.get('/locations', async (req, res) => {
-    const locations = await Location.findAll();
+    try {
+        const locations = await Location.findAll();
 
-    if (!locations || locations.length < 1) {
-        res.status(404).send({
-            success: false,
-            message: "There are no locations at the moment"
+        if (!locations || locations.length < 1) {
+            res.status(404).send({
+                success: false,
+                message: "There are no locations at the moment"
+            });
+        };
+
+        res.status(200).send({
+            success: true,
+            message: "Locations returned successfully.",
+            locations,
+            total: locations.length
         });
-    };
+    } catch (err) {
+        res.status(500).json(err)
+    }
 
-    res.status(200).send({
-        success: true,
-        message: "Locations returned successfully.",
-        locations,
-        total: locations.length
-    });
 });
 
 // Get single location details 
 app.get('/locations/:id', async (req, res) => {
     const { id } = req.params;
-    const location = await Location.findById(id);
-    if (!location) {
-        res.status(404).send({
-            success: false,
-            message: "Location with that id id not found"
+    try {
+        const location = await Location.findOne({ where: { id } });
+        if (!location) {
+            res.status(404).send({
+                success: false,
+                message: "Location with that id id not found"
+            });
+        };
+        res.status(200).send({
+            success: true,
+            message: "Successfully retrived location",
+            location
         });
-    };
-    res.status(200).send({
-        success: true,
-        message: "Successfully retrived location",
-        location
-    });
+    } catch (err) {
+        res.status(500).json(err)
+    }
 });
 
 // Edit location
 app.put('/locations/:id', async (req, res) => {
     const { name, femalePopulation, malePopulation } = req.body;
     const { id } = req.params;
-    const location = await Location.findById(id);
-    if (!location) {
-        res.status(404).send({
-            success: false,
-            message: "Location not found"
-        });
-    };
     const totalPopulation = femalePopulation + malePopulation;
-    const updateInfo = await Location.update({
+    const data = {
         name,
         totalfemale: femalePopulation,
         totalmale: malePopulation,
         total: totalPopulation
-    });
+    }
+    try {
+        const updateLocationInfo = await Location.update({ data }, { where: { id } });
 
-    res.send(200).send({
-        success: true,
-        message: "Location's details Updated successfully.",
-        updateInfo
-    });
+        if (!updateLocationInfo) {
+            res.status(404).send({
+                success: false,
+                message: "Location not found"
+            });
+        };
+
+        res.status(200).send({
+            success: true,
+            message: "Location's details Updated successfully.",
+            updateLocationInfo: data
+        });
+    } catch (err) {
+        res.status(500).json(err)
+    }
 });
 
 // Delete all locations
 app.delete("/locations/:id", async (req, res) => {
     const { id } = req.params;
-    const getLocation = await Location.destroy({ where: { id } });
-    if (!getLocation) {
-        res.status(404).send({
-            success: false,
-            message: "The location with that id is not found"
+    try {
+        const getLocation = await Location.destroy({ where: { id } });
+        if (!getLocation) {
+            res.status(404).send({
+                success: false,
+                message: "The location with that id is not found"
+            });
+        };
+
+        res.status(200).send({
+            success: true,
+            message: "Location deleted successfully."
         });
-    };
-
-    res.status(200).send({
-        success: true,
-        message: "Location deleted successfully."
-    });
+    } catch (err) {
+        res.status(500).json(err)
+    }
 });
-
-// Authenticate connection to the db
-sequlize.authenticate().then(() => {
-    console.log("Connection had been established successflly")
-}).catch(err => {
-    console.log(`Unable to connect to database and error is ${err}`)
-})
 
 app.listen(port, () => {
     console.log(`App is running at http://127.0.0.1:${port}`)
