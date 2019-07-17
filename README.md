@@ -5,8 +5,34 @@
 # Population Management System
 
 Population managment system for managing populations. 
-It is build using NodeJS without using any framework.
+Any user can use this app without Authorization to create location populations, list them, update or delete them. 
+All tests can be done majorly using `Postman`. 
 
-# How to Use
+NB: When running application, make sure that `node` and `sqlite` are installed. 
 
-- Read docs
+# How to Run the app
+
+- Clone: `git clone https://github.com/ezrqnkemboi/population-management-system.git`
+- change directory: `cd population-management-system`
+- Install dependancies: `npm install`
+- Start the app: `npm start`
+- Run test: `npm test`
+
+NB: When running `npm start`, sqlite will create a db `dev.db` and when running `npm test`, then sqlite will create test database `test.db`. 
+All these are ignored. 
+
+Also, note that there is no command that deletes any db created automatically. For example, some tests will fail when you run tests more than once. To run test for more than once, delete the `test.db` file. 
+
+# Expected Endpoints
+
+|Endpoint                            | Functionality                    |HTTP method 
+|------------------------------------|----------------------------------|-------------
+|/locations                       |Add a location                       |POST        
+|/locations  |Get all locations   |GET 
+|/locations/:id               |Get a single locations        |GET 
+|/locations/:id                 |Edit location/update location       |PUT   
+|/locations/:id             |Delete/remove a location                   |DELETE
+
+# Contributor 
+
+[Ezrqn Kemboi](https://github.com/ezrqnkemboi)

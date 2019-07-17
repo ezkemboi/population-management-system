@@ -39,6 +39,22 @@ describe("App tests", () => {
             });
     });
 
+    it('should return 400 when body items are missing', (done) => {
+        const newLocationData = {
+            name: "",
+            femalePopulation: 21,
+            malePopulation: 21
+        }
+        chai.request(app)
+            .post('/locations')
+            .set('content-type', 'application/json')
+            .send(newLocationData)
+            .end((err, res) => {
+                res.should.have.status(400);
+                done();
+            });
+    });
+
     it('should return all locations and populations', (done) => {
         // Create a new contact
         chai.request(app)
@@ -64,6 +80,15 @@ describe("App tests", () => {
             })
     });
 
+    it('should return 404 when location is not available', (done) => {
+        chai.request(app)
+            .get(`/locations/100`)
+            .end((err, res) => {
+                res.should.have.status(404);
+                done();
+            })
+    });
+
     it('should update single location data', (done) => {
         // Create a new contact
         const dataUpdate = {
@@ -81,11 +106,37 @@ describe("App tests", () => {
             })
     });
 
+    it('should return 404 when updating unavailable location', (done) => {
+        // Create a new contact
+        const dataUpdate = {
+            name: "Nairobi",
+            femalePopulation: 101,
+            malePopulation: 67
+        }
+        chai.request(app)
+            .put(`/locations/100`)
+            .set('content-type', 'application/json')
+            .send(dataUpdate)
+            .end((err, res) => {
+                res.should.have.status(404);
+                done();
+            })
+    });
+
     it('should delete/remove a single location', (done) => {
         chai.request(app)
             .delete('/locations/1')
             .end((err, res) => {
                 res.should.have.status(200);
+                done();
+            })
+    });
+
+    it('should return 404 when location to delete is not available', (done) => {
+        chai.request(app)
+            .delete('/locations/100')
+            .end((err, res) => {
+                res.should.have.status(404);
                 done();
             })
     });

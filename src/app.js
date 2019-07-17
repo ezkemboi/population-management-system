@@ -109,9 +109,15 @@ app.put('/locations/:id', async (req, res) => {
         total: totalPopulation
     }
     try {
-        const updateLocationInfo = await Location.update({ data }, { where: { id } });
-
-        if (!updateLocationInfo) {
+        const updateLocationInfo = await Location.update({
+            name: name,
+            totalfemale: femalePopulation,
+            totalmale: malePopulation,
+            total: totalPopulation
+        },
+            { where: { id } }
+        );
+        if (!updateLocationInfo || updateLocationInfo[0] === 0) {
             res.status(404).send({
                 success: false,
                 message: "Location not found"
