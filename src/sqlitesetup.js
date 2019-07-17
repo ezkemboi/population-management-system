@@ -1,8 +1,15 @@
 var Sequelize = require("sequelize");
 var path = require("path");
+var dotenv = require("dotenv");
 
-// Sqlite database path
-const dbPath = path.resolve(__dirname, "populationmanagment.db");
+// Set env for db
+dotenv.config();
+const env = process.env.NODE_ENV
+
+// Sqlite database path for development and test
+const developmentDbPath = path.resolve(__dirname, "dev.db");
+const testDbPath = path.resolve(__dirname, "test.db");
+const dbPath = env === "test" ? testDbPath : developmentDbPath;
 
 // Set sequelize set up
 const sequelize = new Sequelize({

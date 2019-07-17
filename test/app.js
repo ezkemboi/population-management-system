@@ -81,8 +81,7 @@ describe("App tests", () => {
             })
     });
 
-    it('should delete/remove a single location', async (done) => {
-
+    it('should delete/remove a single location', (done) => {
         chai.request(app)
             .delete('/locations/1')
             .end((err, res) => {
